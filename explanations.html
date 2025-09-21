@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>Объяснения - Kotlin Train</title>
+<!-- Тот же шрифт -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    padding: 20px;
+    color: #fff;
+    line-height: 1.5;
+  }
+  h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  section {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h2 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+  }
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  /* Адаптация для мобильных */
+  @media(max-width: 600px){
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+<h1>Объяснения по Kotlin Train</h1>
+
+<section>
+<h2>Переменные</h2>
+<p>Переменные объявляются с помощью ключевых слов <code>var</code> (может изменяться) и <code>val</code> (неизменяемая переменная). Например:</p>
+<pre><code>var x = 5
+val y = 10</code></pre>
+<p>Переменные позволяют хранить данные и изменять их по мере необходимости.</p>
+</section>
+
+<section>
+<h2>Что означают переменные?</h2>
+<p>Переменные — это контейнеры для хранения данных. <code>var</code> позволяет изменять значение, а <code>val</code> — оставлять постоянным после назначения. Например:</p>
+<pre><code>var name = "Алексей"
+name = "Михаил" // допустимо
+
+val age = 30
+// age = 31 — вызовет ошибку, потому что val неизменяемая
+</code></pre>
+</section>
+
+<section>
+<h2>True и False</h2>
+<p>Это логические значения, используемые для условий. В Kotlin есть тип <code>Boolean</code>, который принимает значения <code>true</code> и <code>false</code>. Например:</p>
+<pre><code>val isAlive = true
+val isDead = false</code></pre>
+<p>Они помогают управлять логикой программы с помощью условий и ветвлений.</p>
+</section>
+
+<section>
+<h2>Объяснение True/False</h2>
+<p>Значения <code>true</code> и <code>false</code> используются для логических проверок. Например, если переменная <code>isSunny</code> равна <code>true</code>, программа может показать сообщение "Можно гулять".</p>
+</section>
+
+<section>
+<h2>And и Or</h2>
+<p>Это логические операторы для объединения условий:</p>
+<ul>
+<li><strong>And (&&)</strong>: Оба условия должны быть истинны.</li>
+<li><strong>Or (||)</strong>: Достаточно, чтобы хотя бы одно условие было истинно.</li>
+</ul>
+<p>Пример:</p>
+<pre><code>if (isSunny && isWarm) { ... }
+if (isSunny || isRainy) { ... }</code></pre>
+</section>
+
+<h2>Объяснение And/Or</h2>
+<p>Используются для комбинирования логических условий, чтобы принимать решения в зависимости от нескольких факторов одновременно или по очереди.</p>
+
+<section>
+<h2>If и Else</h2>
+<p>Конструкция <code>if</code> позволяет выполнять блок кода при выполнении условия. <code>else</code> — в случае ложности условия. Например:</p>
+<pre><code>if (score >= 60) {
+    println("Вы сдали")
+} else {
+    println("Попробуйте еще раз")
+}</code></pre>
+</section>
+
+<h2>Объяснение If/Else</h2>
+<p>Это условные конструкции, позволяющие направлять выполнение программы по различным путям в зависимости от условий.</p>
+
+<section>
+<h2>Переменные (Переопределение)</h2>
+<p>Ключевое слово <code>var</code> позволяет переопределять значение переменной. Например:</p>
+<pre><code>var count = 0
+count = 10 // допустимо</code></pre>
+<p>Используйте его, когда значение переменной должно изменяться в процессе работы программы.</p>
+</section>
+
+<h2>Объяснение переопределения</h2>
+<p>Переменные с <code>var</code> можно менять, а с <code>val</code> — нельзя. Это помогает управлять изменяемостью данных.</p>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>Kotlin Train</title>
+
+<!-- Подключаем шрифт из Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+    /* Общие стили */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 30px 15px;
+        /* Максимальная ширина для читаемости и вложенного контента */
+        width: 100%;
+        box-sizing: border-box;
+        color: #fff;
+        line-height: 1.4;
+    }
+
+    h1 {
+        font-weight: 600;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        text-align: center;
+    }
+
+    /* Ссылки с кнопками */
+    a {
+        display: block;
+        width: 100%;
+        max-width: 260px;
+        margin: 10px auto;
+        text-decoration: none;
+    }
+
+    /* Общие стили для кнопок */
+    button {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: rgba(255, 255, 255, 0.15);
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        user-select: none;
+    }
+
+    button:hover, button:focus {
+        background-color: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 6px 20px rgba(118, 75, 162, 0.7);
+        transform: translateY(-2px);
+        outline: none;
+    }
+
+    button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(118, 75, 162, 0.5);
+    }
+
+    /* Мелкие устройства: уменьшение шрифта и паддингов */
+    @media(max-width: 360px){
+        h1 {
+            font-size: 2rem;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 12px 16px;
+        }
+        a {
+            max-width: 90%; /* меньше ширина для небольших экранов */
+        }
+    }
+</style>
+</head>
+<body>
+<h1>Kotlin Train</h1>
+
+<!-- Основные кнопки с ссылками -->
+<a href="explanations.html"><button>Объяснения</button></a>
+<a href="vars.html"><button>Переменные</button></a>
+
+
+<a href="trueFalse.html"><button>True и False</button></a>
+
+
+<a href="orAnd.html"><button>And и Or</button></a>
+
+
+<a href="ifElse.html"><button>If и Else</button></a>
+
+
+<a href="vars2.html"><button>Переменные (Переопределение)</button></a>
+
+<!-- Монеты -->
+<div style="margin-top:20px;">Монеты SIG: <span id="coinDisplay">0</span></div>
+
+<script>
+(function() {
+    let coin = 0;
+    const savedCoin = localStorage.getItem('sig_coin');
+    if (savedCoin !== null) {
+        coin = parseInt(savedCoin, 10) || 0;
+    }
+
+    function updateCoinDisplay() {
+        document.getElementById('coinDisplay').textContent = coin;
+    }
+
+    // Можно обновлять при загрузке
+    updateCoinDisplay();
+
+    // Если захотите увеличить монеты при посещении страницы, снимите комментарий:
+    // coin++;
+    // localStorage.setItem('sig_coin', coin.toString());
+    // updateCoinDisplay();
+
+})();
+</script>
+</body>
+</html>

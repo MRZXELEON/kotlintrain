@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Вопросы по Kotlin - Переопределение переменной</title>
+
+<style>
+    /* Сброс и базовые стили */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 40px 20px;
+        max-width: 720px;
+        margin: auto;
+        color: #f0f0f0;
+        user-select: none;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 900;
+        font-size: 2.8rem;
+        margin-bottom: 35px;
+        letter-spacing: 2px;
+        text-shadow: 0 0 8px rgba(255,255,255,0.35);
+    }
+
+    /* Вопрос */
+    .question {
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        padding: 15px 20px;
+        background: rgba(255 255 255 / 0.15);
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgb(255 255 255 / 0.07) inset;
+        text-align: center;
+        letter-spacing: 0.03em;
+        font-family: 'Fira Code', monospace;
+        user-select: text;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Инпут */
+    .answer-input {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-family: 'Fira Code', monospace;
+        font-weight: 600;
+        background-color: rgba(255 255 255 / 0.25);
+        color: #fcfcfc;
+        box-shadow: 0 4px 15px rgb(0 0 0 / 0.25);
+        transition: background-color 0.3s ease, box-shadow 0.4s ease;
+    }
+    .answer-input::placeholder {
+        color: #ddd;
+        font-style: italic;
+    }
+    .answer-input:focus {
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 0 14px #bbe1fa;
+    }
+
+    /* Кнопка */
+    .check-btn {
+        margin-top: 14px;
+        width: 100%;
+        border: none;
+        background: linear-gradient(90deg, #ffd700, #ffab00);
+        color: #2b2b2b;
+        font-weight: 900;
+        font-size: 1.2rem;
+        padding: 14px 0;
+        border-radius: 15px;
+        cursor: pointer;
+        box-shadow:
+            0 4px 15px rgb(255 183 0 / 0.7),
+            inset 0 -3px 10px rgb(255 220 10 / 0.9);
+        transition:
+            background 0.4s ease,
+            color 0.3s ease,
+            box-shadow 0.3s ease;
+        user-select: none;
+        letter-spacing: 1px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .check-btn:hover,
+    .check-btn:focus {
+        background: linear-gradient(90deg, #ffdb42, #ffa400);
+        color: #1d1d1d;
+        box-shadow:
+            0 6px 22px rgb(255 205 8 / 0.85),
+            inset 0 -4px 14px rgb(255 230 40 / 1);
+        outline: none;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    .check-btn:active {
+        transform: translateY(2px);
+        box-shadow: none;
+    }
+
+    /* Ошибка */
+    .error {
+        margin-top: 10px;
+        min-height: 24px;
+        font-weight: 700;
+        color: #ff6868;
+        letter-spacing: 0.03em;
+        text-align: center;
+        text-shadow: 0 0 6px #ff4a4a;
+    }
+
+    /* Попытки */
+    .attempts {
+        margin-top: 14px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        text-align: center;
+        color: #e0e0e0aa;
+        font-style: italic;
+        user-select: none;
+    }
+
+    /* Результат */
+    .result {
+        margin-top: 18px;
+        min-height: 32px;
+        font-weight: 700;
+        font-size: 1.3rem;
+        text-align: center;
+        letter-spacing: 0.05em;
+        user-select: none;
+        text-shadow:
+            0 0 5px rgba(0,0,0,0.2);
+        transition: color 0.3s ease;
+    }
+    .result.correct {
+        color: #a6f0a6;
+        text-shadow: 0 0 12px #57d957cc;
+    }
+    .result.incorrect {
+        color: #ff7b7b;
+        text-shadow: 0 0 10px #ff3a3a;
+    }
+
+
+    /* Таблица */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(255 255 255 / 0.12);
+        box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+        user-select: none;
+        font-family: 'Fira Code', monospace;
+    }
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255 255 255 / 0.15);
+        font-weight: 700;
+        color: #e9e9e9;
+        font-size: 0.95rem;
+        letter-spacing: 0.01em;
+    }
+    th {
+        background-color: rgba(255 255 255 / 0.2);
+        text-transform: uppercase;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        user-select: none;
+    }
+    tbody tr:hover {
+        background-color: rgba(255 255 255 / 0.15);
+        transition: background-color 0.3s ease;
+    }
+
+    code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.95rem;
+        user-select: text;
+        color: #cfffcf;
+    }
+
+    /* Счет */
+    .score {
+        margin-top: 32px;
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-align: center;
+        letter-spacing: 0.06em;
+        color: #ffe85f;
+        text-shadow: 0 0 10px #ffde49bb;
+        user-select: none;
+    }
+
+    /* Анимация мигания таблицы */
+    @keyframes blinkGreen {
+        0%, 100% { background-color: #1b3718; }
+        50% { background-color: #3dd13d; }
+    }
+    @keyframes blinkRed {
+        0%, 100% { background-color: #441313; }
+        50% { background-color: #e23838; }
+    }
+    .blink-green {
+        animation: blinkGreen 0.4s 4;
+        box-shadow: 0 0 18px #3dd13dcc inset;
+        border-color: #3dd13d !important;
+    }
+    .blink-red {
+        animation: blinkRed 0.4s 4;
+        box-shadow: 0 0 20px #e23838cc inset;
+        border-color: #e23838 !important;
+    }
+
+    /* Плавное появление */
+    .fade-in {
+        animation: fadeIn 1s ease forwards;
+        opacity: 0;
+    }
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+    
+</style>
+</head>
+<body>
+
+    <h1>Переопределение переменной в Kotlin</h1>
+
+    <div class="question fade-in"></div>
+
+    <input type="text" class="answer-input" autocomplete="off" placeholder='Введите ответ, например: w = "pora"' />
+
+    <button class="check-btn">Проверить</button>
+
+    <div class="error"></div>
+    <div class="attempts"></div>
+
+    <table id="answersTable" class="fade-in">
+        <thead>
+            <tr>
+                <th>Ваш ответ</th>
+                <th>Правильный ответ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Данные будут добавляться сюда -->
+        </tbody>
+    </table>
+
+    <div class="result"></div>
+    <div class="score">Правильно: 0 | Монеты SIG: 0</div>
+
+<script>
+(() => {
+    // Функция получения случайных чисел + вспомогательные функции
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomVarName() {
+        const letters = 'abcdefghijklmnopqrstuvwxyz';
+        const len = getRandomInt(1, 4);
+        let name = '';
+        for (let i = 0; i < len; i++) {
+            name += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        return name;
+    }
+
+    function randomStringValue() {
+        const letters = 'abcdefghijklmnopqrstuvwxyz';
+        const len = getRandomInt(1, 4);
+        let val = '';
+        for (let i = 0; i < len; i++) {
+            val += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        return val;
+    }
+
+    function randomNumberValue() {
+        const isFloat = Math.random() < 0.5;
+        if (!isFloat) {
+            return String(getRandomInt(0, 9999));
+        } else {
+            let intPartLen = getRandomInt(1, 2);
+            let fracPartLen = getRandomInt(1, 2);
+            let intPartMax = Math.pow(10, intPartLen) - 1;
+            let intPart = getRandomInt(0, intPartMax);
+            if (intPartLen + 1 + fracPartLen > 4) {
+                fracPartLen = 4 - intPartLen - 1;
+            }
+            if (fracPartLen <= 0) fracPartLen = 1;
+
+            let fracMax = Math.pow(10, fracPartLen) - 1;
+            let fracPart = getRandomInt(0, fracMax);
+
+            let fracStr = fracPart.toString().padStart(fracPartLen, '0');
+            return `${intPart}.${fracStr}`;
+        }
+    }
+
+    // Сохраняем кол-во монет в localStorage
+            function saveCoins() {
+        localStorage.setItem('sig_coins', coins.toString());
+    }
+
+    // В остальных случаях счетчик очков
+    let score = 0;
+
+    const MAX_ATTEMPTS = 3;
+
+    const questionEl = document.querySelector('.question');
+    const inputEl = document.querySelector('.answer-input');
+    const checkBtn = document.querySelector('.check-btn');
+    const errorEl = document.querySelector('.error');
+    const resultEl = document.querySelector('.result');
+    const scoreEl = document.querySelector('.score');
+    const attemptsEl = document.querySelector('.attempts');
+    const answersTableBody = document.querySelector('#answersTable tbody');
+
+    let task = {
+        varName: '',
+        value: '',
+        type: '',
+        question: '',
+        goodAnswer: '',
+        attemptsLeft: MAX_ATTEMPTS,
+
+        reset() {
+            this.varName = randomVarName();
+            const types = ['string', 'number'];
+            this.type = types[Math.floor(Math.random() * types.length)];
+
+            if (this.type === 'string') {
+                this.value = randomStringValue();
+            } else {
+                this.value = randomNumberValue();
+            }
+            this.updateQuestion();
+            this.updateAnswer();
+            this.attemptsLeft = MAX_ATTEMPTS;
+        },
+
+        updateQuestion() {
+            // Вопрос с текстом "Переопределить переменную "x" значением "value""
+            this.question = `Переопределить переменную "${this.varName}" значением ${this.value}`;
+            document.querySelector('.question').textContent = this.question;
+        },
+
+        updateAnswer() {
+            if (this.type === 'string') {
+                this.goodAnswer = `${this.varName} = "${this.value}"`;
+            } else {
+                this.goodAnswer = `${this.varName} = ${this.value}`;
+            }
+        }
+    };
+
+    function normalizeAnswer(str) {
+        return str.trim().replace(/\s+/g, ' ');
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/[&<>"']/g, m => {
+            switch (m) {
+                case '&': return '&amp;';
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '"': return '&quot;';
+                case "'": return '&#39;';
+            }
+        });
+    }
+
+    function hasRussian(text) {
+        return /[а-яёА-ЯЁ]/.test(text);
+    }
+
+    function saveCoins() {
+        localStorage.setItem('sig_coins', coins.toString());
+    }
+
+    function updateUI() {
+        document.querySelector('.question').textContent = task.question;
+        inputEl.value = '';
+        inputEl.focus();
+        errorEl.textContent = '';
+        resultEl.textContent = '';
+        scoreEl.textContent = `Правильно: ${score} | Монеты SIG: ${coins}`;
+        attemptsEl.textContent = `Осталось попыток: ${task.attemptsLeft}`;
+    }
+
+    function addAnswerToTable(userAnswerRaw) {
+        const row = document.createElement('tr');
+
+        const cellUser = document.createElement('td');
+        cellUser.innerHTML = `<code>${escapeHtml(userAnswerRaw)}</code>`;
+        row.appendChild(cellUser);
+
+        const cellCorrect = document.createElement('td');
+        cellCorrect.innerHTML = `<code>${escapeHtml(task.goodAnswer)}</code>`;
+        row.appendChild(cellCorrect);
+
+        answersTableBody.appendChild(row);
+    }
+
+    function flashTable(colorClass) {
+        const table = document.getElementById('answersTable');
+        table.classList.remove('blink-red', 'blink-green');
+        void table.offsetWidth;
+        table.classList.add(colorClass);
+    }
+
+    // Инициализация
+    task.reset();
+    updateUI();
+
+    checkBtn.addEventListener('click', () => {
+        const userAnswerRaw = inputEl.value;
+        const userAnswer = normalizeAnswer(userAnswerRaw);
+
+        if (userAnswer === '') {
+            errorEl.textContent = 'Ошибка: вы не заполнили поле!';
+            return;
+        }
+
+        if (hasRussian(userAnswerRaw)) {
+            errorEl.textContent = 'Ошибка: нельзя использовать русские буквы в ответе!';
+            return;
+        }
+
+        errorEl.textContent = '';
+
+        const isCorrect = userAnswer === task.goodAnswer;
+
+        addAnswerToTable(userAnswerRaw);
+
+        if (isCorrect) {
+            score++;
+            coins++;
+            saveCoins(); // сохраняем после изменения
+            resultEl.textContent = 'Верно!';
+            resultEl.className = 'result correct';
+            flashTable('blink-green');
+            task.reset();
+            updateUI();
+        } else {
+            task.attemptsLeft--;
+            if (task.attemptsLeft > 0) {
+                resultEl.textContent = `Неверно! Попробуйте ещё. Осталось попыток: ${task.attemptsLeft}`;
+                resultEl.className = 'result incorrect';
+                flashTable('blink-red');
+                attemptsEl.textContent = `Осталось попыток: ${task.attemptsLeft}`;
+                inputEl.value = '';
+                inputEl.focus();
+            } else {
+                resultEl.textContent = `Неверно! Попытки исчерпаны. Правильный ответ: ${task.goodAnswer}`;
+                resultEl.className = 'result incorrect';
+                flashTable('blink-red');
+
+                score = 0; // сбрасываем очки
+                task.reset();
+                updateUI();
+            }
+        }
+        scoreEl.textContent = `Правильно: ${score} | Монеты SIG: ${coins}`;
+    });
+
+    inputEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            checkBtn.click();
+        }
+    });
+
+})();
+</script>
+
+</body>
+</html>
